@@ -29,6 +29,7 @@ class Video_Caption_Generator():
 
         with tf.device("/cpu:0"):
             self.Wemb = tf.Variable(tf.random_uniform([n_words, dim_hidden], -0.1, 0.1), name='Wemb')
+        #self.bemb = tf.Variable(tf.zeros([dim_hidden]), name='bemb')
 
         self.lstm1 = tf.nn.rnn_cell.BasicLSTMCell(dim_hidden, state_is_tuple=False)
         self.lstm2 = tf.nn.rnn_cell.BasicLSTMCell(dim_hidden, state_is_tuple=False)
@@ -202,7 +203,7 @@ class Video_Caption_Generator():
 #=====================================================================================
 
 testing_label = './data/testing_public_label.json'
-video_train_feat_path = './data/train_features'
+video_train_feat_path = './data/test_features'
 video_test_feat_path = './data/test_features'
 
 video_train_data_path = './data/video_corpus.csv'
@@ -228,6 +229,7 @@ learning_rate = 0.0001
 def get_video_train_data(video_data_path, video_feat_path):
     video_data = pd.read_csv(video_data_path, sep=',')
     video_data = video_data[video_data['Language'] == 'English']
+    #apply function to each row (axis=1)
     video_data['video_path'] = video_data.apply(lambda row: row['VideoID']+'_'+str(int(row['Start']))+'_'+str(int(row['End']))+'.avi.npy', axis=1)
     video_data['video_path'] = video_data['video_path'].map(lambda x: os.path.join(video_feat_path, x))
     video_data = video_data[video_data['video_path'].map(lambda x: os.path.exists( x ))]
@@ -414,6 +416,7 @@ def train():
                         })
             print("aaa")
             print 'idx: ', start, " Epoch: ", epoch, " loss: ", loss_val, ' Elapsed time: ', str((time.time() - start_time))
+
         if np.mod(epoch, 10) == 0:
             print "Epoch ", epoch, " is done. Saving the model ..."
             saver.save(sess, os.path.join(model_path, 'model'), global_step=epoch)
@@ -421,7 +424,7 @@ def train():
 
 
 def test(testdata,outfile):
-    model_path='./models/model-20'
+    model_path='./models/model-30'
     test_data = get_video_test_data(video_test_data_path, testdata)
     test_videos = test_data['video_path'].unique()
     with open(testing_label) as data_file:
@@ -451,7 +454,7 @@ def test(testdata,outfile):
     generated_sentences = []
     bleu_score_avg = [0., 0.]
     for idx, video_feat_path in enumerate(test_videos):
-        if idx>=len(test_labels) :
+        if idx>49 :
           continue
         print idx, video_feat_path
 
@@ -487,7 +490,8 @@ def test(testdata,outfile):
     print 'from ',bleu_score_avg[1],'\n'
     print 'avg bleu score', bleu_score_avg[0]/bleu_score_avg[1], '\n'
 
+
 if __name__ == "__main__":
-    testing_data = sys.argv[1]
+    testdata=sys.argv[1]
     outfile=sys.argv[2]
-    test(testing_data,outfile)
+    test(testdata,outfile)
