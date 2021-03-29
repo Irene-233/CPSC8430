@@ -424,7 +424,7 @@ def train():
 
 
 def test(testdata,outfile):
-    model_path='./models/model-30'
+    model_path='./models/model-20'
     test_data = get_video_test_data(video_test_data_path, testdata)
     test_videos = test_data['video_path'].unique()
     with open(testing_label) as data_file:
