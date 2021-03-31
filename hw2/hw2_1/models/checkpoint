@@ -1,4 +1,2 @@
-model_checkpoint_path: "model-20"
-all_model_checkpoint_paths: "model-0"
-all_model_checkpoint_paths: "model-10"
-all_model_checkpoint_paths: "model-20"
+model_checkpoint_path: "model-50"
+all_model_checkpoint_paths: "model-50"
