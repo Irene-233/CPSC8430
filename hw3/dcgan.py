@@ -140,9 +140,9 @@ for epoch in range(25):
         print('[%d/%d][%d/%d] ' % (epoch, 25, i, len(dataloader)))
         if (i % 100 == 0)|(i==782):
             print('save image for epoch:', epoch)
-            vutils.save_image(real, '%s/real_samples.png' % ("./result1"), normalize = True)
+            vutils.save_image(real, '%s/real_samples.png' % ("./dcgan_result/result1"), normalize = True)
             fake = netG(noise)
-            vutils.save_image(fake.data, '%s/fake_samples.png' % ("./result2"), normalize = True)
+            vutils.save_image(fake.data, '%s/fake_samples.png' % ("./dcgan_result/result2"), normalize = True)
             
-            FID.fid("./result1","./result2")
+            FID.fid("./dcgan_result/result1","./dcgan_result/result2")
         

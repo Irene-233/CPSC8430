@@ -82,7 +82,6 @@ def calculate_activation_statistics(images, batch_size):
     return mu, sigma
 
 
-# Modified from: https://github.com/bioinf-jku/TTUR/blob/master/fid.py
 def calculate_frechet_distance(mu1, sigma1, mu2, sigma2, eps=1e-6):
 
     mu1 = np.atleast_1d(mu1)
@@ -186,24 +185,7 @@ def load_images(path):
 
 
 def fid(path1,path2,batch_size=8):
-    from optparse import OptionParser
-    #parser = OptionParser()
-    #parser.add_option("--p1", "--path1", dest="path1", 
-    #                  help="Path to directory containing the real images")
-    #parser.add_option("--p2", "--path2", dest="path2", 
-    #                  help="Path to directory containing the generated images")
-    #parser.add_option("--multiprocessing", dest="use_multiprocessing",
-    #                  help="Toggle use of multiprocessing for image pre-processing. Defaults to use all cores",
-    #                  default=False,
-    #                  action="store_true")
-    #parser.add_option("-b", "--batch-size", dest="batch_size",
-    #                  help="Set batch size to use for InceptionV3 network",
-    #                  type=int)
     
-    #options, _ = parser.parse_args()
-    #assert options.path1 is not None, "--path1 is an required option"
-    #assert options.path2 is not None, "--path2 is an required option"
-    #assert options.batch_size is not None, "--batch_size is an required option"
     images1 = load_images(path1)
     images2 = load_images(path2)
     fid_value = calculate_fid(images1, images2, False, batch_size)
